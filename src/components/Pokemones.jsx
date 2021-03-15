@@ -6,7 +6,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 //llamamos a la accion que vamos a disparar.
 //llamamos a la función que tiene el pato con la acción que se quiere ejecutar en este componente
-import { obtenerPokemonesAccion } from "../redux/pokeDucks";
+import { obtenerPokemonesAccion, siguientePokemonAction } from "../redux/pokeDucks";
 
 const Pokemones = () => {
   //llamamos al dispatch para que pueda disparar las acciones.
@@ -17,22 +17,20 @@ const Pokemones = () => {
 
   const capitalize = (word) => {
     const cap = word.charAt(0);
-    const restText = word.slice(1,word.lenght);
+    const restText = word.slice(1, word.lenght);
     const capped = cap.toUpperCase() + restText;
-    return capped
+    return capped;
   };
 
   //variables globales para el buscador
- 
+
   let globalRange = 50;
-  const cambiarLabel= (event) =>{
+  const cambiarLabel = (event) => {
     const range = document.getElementById("rangeValue");
     range.textContent = event.target.value;
     range.setAttribute("range", event.target.value);
     globalRange = event.target.value;
-  }
-
-
+  };
 
   return (
     <div className="mb-5">
@@ -64,17 +62,30 @@ const Pokemones = () => {
           title="Consumir API"
           onClick={() => {
             const queryRange = globalRange;
-            dispatch(obtenerPokemonesAccion(0,queryRange));
+            dispatch(obtenerPokemonesAccion(0, queryRange));
           }}
         >
           Obtener Pokemones
         </button>
-        <label>De 0 a <span id="rangeValue">50</span></label>
-        <input type="range" min="1" max="50" id="range" onChange={cambiarLabel}/>
+        <button 
+        className="btn btn-warning fw-bolder m-4"
+        onClick={()=>{dispatch(siguientePokemonAction())}}
+        >siguiente
+        </button>
+        <label>
+          De 0 a <span id="rangeValue">50</span>
+        </label>
+        <input
+          type="range"
+          min="1"
+          max="50"
+          id="range"
+          onChange={cambiarLabel}
+        />
       </div>
       <div className="row mt-3 d-flex justify-content-center" id="pokeList">
         {pokemones.map((pokemon) => (
-          <div key={pokemon.name} className="col-4">
+          <div key={pokemon.name} className="col-6">
             <a
               title={capitalize(pokemon.name)}
               className="text-white border border-light btn w-100 text-capitalize"
